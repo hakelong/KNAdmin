@@ -1,5 +1,5 @@
 <style lang="less">
-    @import './login.less';
+@import './login.less';
 </style>
 
 <template>
@@ -30,7 +30,6 @@
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
                     </Form>
-                    <p class="login-tip">输入任意用户名和密码即可</p>
                 </div>
             </Card>
         </div>
@@ -43,7 +42,7 @@ export default {
     data () {
         return {
             form: {
-                userName: 'iview_admin',
+                userName: '',
                 password: ''
             },
             rules: {
@@ -60,17 +59,45 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    Cookies.set('user', this.form.userName);
-                    Cookies.set('password', this.form.password);
-                    this.$store.commit('setAvator', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg');
-                    if (this.form.userName === 'iview_admin') {
-                        Cookies.set('access', 0);
-                    } else {
-                        Cookies.set('access', 1);
-                    }
-                    this.$router.push({
-                        name: 'home_index'
-                    });
+                  let password2 = md5(this.form.password)
+                  try {
+                    let response = await util.ajax.post('oauth/token', {
+                      grant_type: 'password',
+                      client_id: '2',
+                      client_secret: 'ez0ozCZPCzgP1A1xOmsF331ZlyoEb6HvdqXs08rr',
+                      username: this.form.userName,
+                      password: password2
+                    })
+                    console.log(response)
+
+                    Cookies.set('token_type', response.data.token_type)
+                    Cookies.set('access_token', response.data.access_token)
+                    Cookies.set(
+                      'Authorization',
+                      response.data.token_type + ' ' + response.data.access_token
+                    )
+
+                    response = await util.ajax.post('api/backstage/user/index', {
+                      loginName: this.form.userName
+                    })
+
+                    const data = response.data
+                    Cookies.set('userInfo', data)
+                    this.$store.commit(
+                      'setAvator',
+                      'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg'
+                    )
+                    this.$Message.success('登录成功！')
+                    this.$router.push({ name: 'enterprise_manage' })
+                  } catch (err) {
+                    Cookies.remove('token_type')
+                    Cookies.remove('access_token')
+                    Cookies.remove('Authorization')
+                    this.$Message.error('登录失败！')
+                    console.log(err)
+                  }
+                } else {
+                  this.$Message.error('表单验证失败!')
                 }
             });
         }
