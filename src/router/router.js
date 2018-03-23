@@ -162,15 +162,15 @@ export const appRouter = [
     path: '/order',
     icon: 'ios-paper',
     title: '订单',
-    name: 'page',
+    name: 'order',
     component: Main,
     children: [
       {
         path: 'index',
-        title: 'Page',
-        name: 'page_index',
+        title: '订单益',
+        name: 'order_index',
         component: resolve => {
-          require(['@/views/page/page.vue'], resolve)
+          require(['@/views/order/index.vue'], resolve)
         }
       }
     ]
