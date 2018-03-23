@@ -58,19 +58,17 @@ h1 {
 
 .search-bar {
   padding: 15px 0;
-  overflow: hidden;
 }
 .search-bar span {
   font-size: 12px;
   color: #495060;
 }
-
 </style>
 <template>
   <div class="menu">
 
     <!-- 页面标题部分 -->
-    <h1 class="page-title"> 用户管理 </h1>
+    <h1 class="page-title"> 地址列表 </h1>
 
     <!-- 页面content部分 -->
     <div class="portlet">
@@ -78,37 +76,30 @@ h1 {
       <!-- content的title部分 -->
       <div class="portlet-title">
         <div class="caption">
-          <Icon type="ios-gear-outline"></Icon>  用户管理
+          <Icon type="ios-gear-outline"></Icon>  地址列表
         </div>
-        <div align='right'>
+        <!-- <div align='right'>
           <Button icon='plus-round' type='primary' style="margin-top:5px;" @click="addGuideRewardClick">添加现场指导奖励</Button>
-        </div>
+        </div> -->
       </div>
       <!-- 主体内容 -->
       <div class="portlet-body">
-        <div class='search-bar'>
-          <Select v-model="table.userType" style="width:120px;float:right" @on-change='typeChange'>
-              <Option :value="0" >全部</Option>
-              <Option :value="1" >管理员</Option>
-              <Option :value="2" >普通用户</Option>
-          </Select>
-        </div>
         <!--表格部分-->
         <Table ref='mainTable' :loading='isLoading' :data="tableData1" :columns="tableColumns" stripe highlight-row border></Table>
         <!-- 分页部分 -->
-        <div style="margin: 10px;overflow: hidden">
+        <!-- <div style="margin: 10px;overflow: hidden">
           <div style="float: right;">
             <Page :total="total" :current="table.page" @on-change="onPageChanged" @on-page-size-change="onPageSizeChanged" show-total show-sizer :page-size='table.perPage'></Page>
           </div>
           <div style='float:left;line-height:32px;'>显示第
             <span v-text='from'></span> 到
             <span v-text='to'></span> 条记录</div>
-        </div>
+        </div> -->
       </div>
 
     </div>
     <!-- 添加指导奖励 -->
-  <Modal 
+  <!-- <Modal 
     title='添加现场指导奖励' 
     v-model='modal1'
     @on-cancel='addCancel'
@@ -125,7 +116,7 @@ h1 {
       <Button type='primary' @click='addSubmit' :loading='loading'>保存</Button>
       <Button @click='addCancel'>取消</Button>
     </div>
-  </Modal>
+  </Modal> -->
   </div>
 </template>
 <script>
@@ -154,9 +145,7 @@ export default {
       },
       //
       table: {
-        page: 1,
-        perPage: 10,
-        userType:0
+        userId:this.$route.params.id
       },
 
       //
@@ -168,51 +157,58 @@ export default {
       tableData1: [],
       tableColumns: [
         {
-          title: '登录名',
-          key: 'loginName',
+          title:'联系人',
+          key:'contactName'
         },
         {
-          title: '昵称',
-          key: 'nickName',
+          title:'联系电话',
+          key:'contactPhone'
         },
         {
-          title: '性别',
-          key: 'sex',
+          title:'地址',
+          key:'address',
+          width:'300'
+        },
+        {
+          title:'是否默认地址',
+          key:'isDefault',
+          width:'80',
           render:(h,params)=>{
-            let str=params.row.sex==='0'?'保密':params.row.sex==='1'?'男':'女'
-            return h('div',{},str)
-          }
-        },
-        {
-          title: '积分',
-          key: 'score',
-        },
-        {
-          title: '金额',
-          key: 'money',
-        },
-        {
-          title: '时间',
-          key: 'createdAt',
-        },
-        {
-          title:'操作',
-          render:(h,params)=>{
-            let id=params.row.userId
-            return h('Button',{
-              props:{
-                type:'info'
-              },
-              on:{
-                click:()=>{
-                  this.$router.push({name:'users_addList',params:{id}})
-                }
+            let str=params.row.isDefault===1?'是':'否'
+            let color=params.row.isDefault===1?'red':'green'
+            return h('div',{
+              style:{
+                color
               }
-            },'用户地址')
+            },str)
           }
-        }
+        },
+        {
+          title:'更新日期',
+          key:'updated_at'
+        },
+        {
+          title:'创建日期',
+          key:'createdAt'
+        },
       ],
-     
+      tableColumnsConfig: [
+        {
+          title: '奖励金额',
+          key: 'reward',
+          fixed: '',
+          _fixed: 'left',
+          _min_width: 300
+        },
+        {
+          title: '生效日期',
+          key: 'effectiveDate',
+          width: 0,
+          fixed: '',
+          _fixed: 'right',
+          _min_width: 255
+        }
+      ]
     }
   },
   computed:{
@@ -226,9 +222,6 @@ export default {
     }
   },
   methods: {
-    typeChange(){
-      this.getData()
-    },
     addCancel(){
       this.modal1=false;
       this.$refs['addForm'].resetFields();
@@ -289,21 +282,21 @@ export default {
       this.isLoading = true
       let param = this.table
       util.ajax
-        .post('api/user/index', param)
+        .post('api/user/address', param)
         .then(response => {
           var data = response.data
 
-          this.tableData1 = data.items
-          this.from = data.from
-          this.to = data.to
-          this.total = data.total
+          this.tableData1 = data
+          // this.from = data.from
+          // this.to = data.to
+          // this.total = data.total
           this.isLoading = false
         })
         .catch(err => {
           this.tableData1=[];
-          this.from = 0
-          this.to = 0
-          this.total = 0
+          // this.from = 0
+          // this.to = 0
+          // this.total = 0
           this.isLoading = false;
         })
     },

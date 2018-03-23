@@ -38,6 +38,8 @@
 
 <script>
 import Cookies from 'js-cookie';
+import md5 from 'js-md5'
+import util from '@/libs/util.js'
 export default {
     data () {
         return {
@@ -57,14 +59,14 @@ export default {
     },
     methods: {
         handleSubmit () {
-            this.$refs.loginForm.validate((valid) => {
+            this.$refs.loginForm.validate(async (valid) => {
                 if (valid) {
                   let password2 = md5(this.form.password)
                   try {
                     let response = await util.ajax.post('oauth/token', {
                       grant_type: 'password',
                       client_id: '2',
-                      client_secret: 'ez0ozCZPCzgP1A1xOmsF331ZlyoEb6HvdqXs08rr',
+                      client_secret: 'cQLEnULTzPsctAK8krG3HQ43tnEULiDoZy0DhBq2',
                       username: this.form.userName,
                       password: password2
                     })
@@ -77,7 +79,7 @@ export default {
                       response.data.token_type + ' ' + response.data.access_token
                     )
 
-                    response = await util.ajax.post('api/backstage/user/index', {
+                    response = await util.ajax.post('api/user/info', {
                       loginName: this.form.userName
                     })
 
@@ -88,13 +90,12 @@ export default {
                       'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg'
                     )
                     this.$Message.success('登录成功！')
-                    this.$router.push({ name: 'enterprise_manage' })
+                    this.$router.push({ name: 'users_index' })
                   } catch (err) {
                     Cookies.remove('token_type')
                     Cookies.remove('access_token')
                     Cookies.remove('Authorization')
                     this.$Message.error('登录失败！')
-                    console.log(err)
                   }
                 } else {
                   this.$Message.error('表单验证失败!')
