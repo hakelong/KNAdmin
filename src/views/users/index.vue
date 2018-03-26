@@ -81,7 +81,7 @@ h1 {
           <Icon type="ios-gear-outline"></Icon>  用户管理
         </div>
         <div align='right'>
-          <Button icon='plus-round' type='primary' style="margin-top:5px;" @click="addGuideRewardClick">添加现场指导奖励</Button>
+          <!-- <Button icon='plus-round' type='primary' style="margin-top:5px;" @click="addGuideRewardClick">添加现场指导奖励</Button> -->
         </div>
       </div>
       <!-- 主体内容 -->

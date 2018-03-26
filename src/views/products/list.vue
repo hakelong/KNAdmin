@@ -272,7 +272,7 @@ export default {
         },
         {
           title: '操作',
-          width:'300',
+          width:'350',
           render: (h, params) => {
             let id = params.row.productId
             return h('ButtonGroup', [
@@ -291,6 +291,20 @@ export default {
                   }
                 },
                 '编辑'
+              ),
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary'
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push({name:'products_code',params:{id}})
+                    }
+                  }
+                },
+                '产品码列表'
               ),
               h(
                 'Button',

@@ -58,6 +58,22 @@ export const otherRouter = {
       component: resolve => {
         require(['@/views/home/home.vue'], resolve)
       }
+    },
+    {
+      path: 'users/addlist/:id',
+      title: '地址',
+      name: 'users_addList',
+      component: resolve => {
+        require(['@/views/users/addList.vue'], resolve)
+      }
+    },
+    {
+      path: 'products/codelist/:id',
+      title: '产品管理',
+      name: 'products_code',
+      component: resolve => {
+        require(['@/views/products/codeList.vue'], resolve)
+      }
     }
   ]
 }
@@ -78,15 +94,15 @@ export const appRouter = [
         component: resolve => {
           require(['@/views/users/index.vue'], resolve)
         }
-      },
-      {
-        path: 'addlist/:id',
-        title: '地址',
-        name: 'users_addList',
-        component: resolve => {
-          require(['@/views/users/addList.vue'], resolve)
-        }
       }
+      // {
+      //   path: 'addlist/:id',
+      //   title: '地址',
+      //   name: 'users_addList',
+      //   component: resolve => {
+      //     require(['@/views/users/addList.vue'], resolve)
+      //   }
+      // }
     ]
   },
   {
