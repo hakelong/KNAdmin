@@ -170,20 +170,7 @@ h1 {
     </div>
   </Modal>
   
-  <Modal title='生成产品码' v-model='modal3' @on-cancel='modal3=false'  >
-    <Form ref='createForm' :label-width='100' :model='create.param'>
-      <FormItem label='生成数量' prop='createNumber'>
-        <Input v-model='create.param.createNumber'></Input>
-      </FormItem>
-      <FormItem label='批次' prop='batch'>
-        <Input v-model='create.param.batch'></Input>
-      </FormItem>
-    </Form>
-    <div slot='footer'>
-      <Button type='primary' @click='createSubmit'>保存</Button>
-      <Button @click='modal3=false'>取消</Button>
-    </div>
-  </Modal>
+  
   </div>
 </template>
 <script>
@@ -272,7 +259,7 @@ export default {
         },
         {
           title: '操作',
-          width:'350',
+          width:'250',
           render: (h, params) => {
             let id = params.row.productId
             return h('ButtonGroup', [
@@ -305,22 +292,6 @@ export default {
                   }
                 },
                 '产品码列表'
-              ),
-              h(
-                'Button',
-                {
-                  props: {
-                    type: 'success'
-                  },
-                  on: {
-                    click: () => {
-                      this.$refs.createForm.resetFields();
-                      this.create.param.productId=params.row.productId;
-                      this.modal3=true;
-                    }
-                  }
-                },
-                '产品码生成'
               ),
               h(
                 'Button',

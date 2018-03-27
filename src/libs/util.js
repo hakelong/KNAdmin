@@ -7,7 +7,7 @@ import Cookies from 'js-cookie'
 
 let util = {}
 util.title = function(title) {
-  title = title || 'iView admin'
+  title = title || '康能防伪系统'
   window.document.title = title
 }
 
@@ -15,8 +15,8 @@ const ajaxUrl =
   env === 'development'
     ? 'http://fwtest.51xunguo.com'
     : env === 'production'
-      ? 'http://backend.gsp365.com'
-      : 'http://www.51xunguo.com:9090'
+      ? 'http://fwtest.51xunguo.com'
+      : 'http://fwtest.51xunguo.com'
 
 util.ajax = axios.create({
   baseURL: ajaxUrl,

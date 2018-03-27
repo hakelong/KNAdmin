@@ -389,7 +389,12 @@ export default {
           render: (h, params) => {
             let status=params.row.orderStatus
             let str =  status=== '0' ? '未确认' : status==='1'?'已确认':status==='2'?'已取消':status==='3'?'已完成':'已退货'
-            return h('div', {}, str)
+            let color=status=== '3'?'green':status==='2'?'red':'#495060'
+            return h('div', {
+              style:{
+                color
+              }
+            }, str)
           }
         },
         {
@@ -397,7 +402,12 @@ export default {
           key: 'payStatus',
           render: (h, params) => {
             let str = params.row.payStatus === '0' ? '未付款' : '已付款'
-            return h('div', {}, str)
+            let color=params.row.payStatus=== '0'?'red':'green'
+            return h('div', {
+              style:{
+                color
+              }
+            }, str)
           }
         },
         {
@@ -405,7 +415,12 @@ export default {
           key: 'shipStatus',
           render: (h, params) => {
             let str = params.row.shipStatus === '0' ? '未发货' : '已发货'
-            return h('div', {}, str)
+            let color=params.row.shipStatus=== '0'?'red':'green'
+            return h('div', {
+               style:{
+                color
+              }
+            }, str)
           }
         },
         {

@@ -80,7 +80,7 @@ h1 {
           <Icon type="ios-gear-outline"></Icon>  产品列表
         </div>
         <div align='right'>
-          <!-- <Button icon='plus-round' type='primary' style="margin-top:5px;" @click="addProduct">添加产品</Button> -->
+          <Button icon='plus-round' type='primary' style="margin-top:5px;" @click="createCode">生成产品码</Button>
         </div>
       </div>
       <!-- 主体内容 -->
@@ -88,7 +88,7 @@ h1 {
         <div class='search-bar'>
           <div style='float:right'>
             <span>是否使用:</span>
-            <Select v-model="table.productType" style="width:120px;" @on-change='typeChange'>
+            <Select v-model="table.isUsed" style="width:120px;" @on-change='typeChange'>
                 <Option :value="-1" >全部</Option>
                 <Option :value="0" >未使用</Option>
                 <Option :value="1" >已使用</Option>
@@ -96,7 +96,7 @@ h1 {
           </div>
           <div style='float:right'>
             <span>是否抽奖:</span>
-            <Select v-model="table.productType" style="width:120px;" @on-change='typeChange'>
+            <Select v-model="table.isPlay" style="width:120px;" @on-change='typeChange'>
                 <Option :value="-1" >全部</Option>
                 <Option :value="0" >未抽奖</Option>
                 <Option :value="1" >已抽奖</Option>
@@ -122,7 +122,20 @@ h1 {
       </div>
 
     </div>
-
+    <Modal title='生成产品码' v-model='modal3' @on-cancel='modal3=false'  >
+      <Form ref='createForm' :label-width='100' :model='create.param'>
+        <FormItem label='生成数量' prop='createNumber'>
+          <Input v-model='create.param.createNumber'></Input>
+        </FormItem>
+        <FormItem label='批次' prop='batch'>
+          <Input v-model='create.param.batch'></Input>
+        </FormItem>
+      </Form>
+      <div slot='footer'>
+        <Button type='primary' @click='createSubmit'>保存</Button>
+        <Button @click='modal3=false'>取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -201,7 +214,7 @@ export default {
           title: '是否使用',
           key: 'isUsed',
           render: (h, params) => {
-            let str = params.row.isUsed === '0' ? '未使用' : '已使用'
+            let str = params.row.isUsed === 0 ? '未使用' : '已使用'
             return h('div', {}, str)
           }
         },
@@ -209,13 +222,9 @@ export default {
           title: '是否抽奖',
           key: 'isPlay',
           render: (h, params) => {
-            let str = params.row.isPlay === '0' ? '未抽奖' : '已抽奖'
+            let str = params.row.isPlay === 0 ? '未抽奖' : '已抽奖'
             return h('div', {}, str)
           }
-        },
-        {
-          title: '用户id',
-          key: 'scanUserId'
         },
         {
           title: '用户昵称',
@@ -226,9 +235,32 @@ export default {
           key: 'scaned_at'
         },
         {
-          title: '访问时间',
+          title: '创建时间',
           key: 'createdAt'
         },
+        // {
+        //   title: '操作',
+        //   width:'150',
+        //   render: (h, params) => {
+        //     let id = params.row.productId
+        //     return h('ButtonGroup', [
+        //       h(
+        //         'Button',
+        //         {
+        //           props: {
+        //             type: 'success'
+        //           },
+        //           on: {
+        //             click: () => {
+                      
+        //             }
+        //           }
+        //         },
+        //         '产品码生成'
+        //       ),         
+        //     ])
+        //   }
+        // }
       ]
     }
   },
@@ -243,6 +275,29 @@ export default {
     }
   },
   methods: {
+    createCode(){
+      this.$refs.createForm.resetFields();
+      this.create.param.productId=this.$route.params.id;
+      this.modal3=true;
+    },
+    createSubmit() {
+      let param =this.create.param
+      let url = 'api/product_code/create'
+      util.ajax.post(url, param).then(
+        res => {
+          if (res.data.state === 1) {
+            this.$Message.success('成功')
+            this.modal3=false
+            this.getData()
+          } else {
+            this.$Message.error('失败')
+          }
+        },
+        err => {
+          this.$Message.error('失败')
+        }
+      )
+    },
     typeChange() {
       this.getData()
     },

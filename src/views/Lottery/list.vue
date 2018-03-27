@@ -446,7 +446,7 @@ export default {
       this.isLoading = true
       let param = this.table
       util.ajax
-        .post('api/prize/record', param)
+        .post('api/prize/index', param)
         .then(response => {
           var data = response.data
 

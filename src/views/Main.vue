@@ -73,9 +73,18 @@ export default {
             this.shrink = !this.shrink;
         },
         handleClickUserDropdown (name) {
+          if(name==='loginout'){
+            Cookies.remove('userInfo')
+            Cookies.remove('Authorization')
+            Cookies.remove('token_type')
+            Cookies.remove('access_token')
+            this.$Notice.close('greeting')
+            localStorage.clear()
+            sessionStorage.clear()
             this.$router.push({
-                name: 'login'
-            });
+              name: 'login'
+            })
+          }
         }
     },
     mounted () {
