@@ -75,6 +75,20 @@ h1 {
 .prochild{
   display:flex;padding:5px 0;border-bottom:1px solid gray;
 }
+.detail-content p{
+  margin:15px 0;
+  overflow: hidden;
+}
+.detail-content .left-title{
+  display:block;
+  width: 100px;
+  float:left;
+  text-align: right;
+  margin-right:10px
+}
+.detail-content .right-content{
+  overflow: hidden;
+}
 </style>
 <template>
   <div class="menu">
@@ -149,66 +163,90 @@ h1 {
     @on-cancel='editCancel'
     >
     <Form ref='editForm' :label-width='100' :model='editReward' :rules='editReward.ruleValidate'>
-      <FormItem label='订单类型'>
-        <span>{{editReward.orderType==='1'?'积分产品':'抽奖产品'}}</span>
-      </FormItem>
-      <FormItem label='订单序列号' >
-        <span>{{editReward.orderSn}}</span>
-      </FormItem>
-      <FormItem label='用户昵称' >
-        <span>{{editReward.nickName}}</span>
-      </FormItem>
-      <FormItem label='订单状态' >
-        <span>{{editReward.orderStatus==='0'?'未确认' : editReward.orderStatus==='1'?'已确认':editReward.orderStatus==='2'?'已取消':editReward.orderStatus==='3'?'已完成':'已退货'}}</span>
-      </FormItem>
-      <FormItem label='付款状态' >
-        <span>{{editReward.payStatus==='1'?'已付款':'未付款'}}</span>
-      </FormItem>
-      <FormItem label='发货状态' >
-        <span>{{editReward.shipStatus==='1'?'已发货':'未发货'}}</span>
-      </FormItem>
-      <FormItem label='运单信息' >
-        <span>{{editReward.shipRemark}}</span>
-      </FormItem>
-      <FormItem label='发货时间' >
-        <span>{{editReward.deliveryTime}}</span>
-      </FormItem>
-      <FormItem label='积分' >
-        <span>{{editReward.score}}</span>
-      </FormItem>
-      <FormItem label='收货人信息' >
-        <span>联系人:{{editReward.consignee.shippingContact}}</span><br>
-        <span>收货地址:{{editReward.consignee.shippingAddress}}</span><br>
-        <span>邮政编码:{{editReward.consignee.shippingZip}}</span><br>
-        <span>手机号:{{editReward.consignee.shippingMobile}}</span>
-      </FormItem>
-      <FormItem label='订单产品' >
-        <div class='prosbox'>
-          <div v-for='item in editReward.orderProducts' class='prochild' >
-            <template v-if="item.orderType==='1'">
-              <div style='margin-right:5px'>
-                <img :src="item.scoreProductImage" style='display:block;width:80px;height:80px;'>
-              </div>
-              <div>
-                <span style='color:#000'>积分产品名称:{{item.scoreProductName}}</span><br>
-                <span>产品类型:{{item.orderType==='1'?'积分产品':'抽奖产品'}}</span> -
-                <span>积分:{{item.exchangeScore}}</span> -
-                <span>数量: {{item.number}}</span>
-              </div>
-            </template>
-            <template v-else>
-              <div>
-                <p style='color:#000'>抽奖产品名称:{{item.prizeName}}</p>
-                <span >产品类型:{{item.orderType==='1'?'积分产品':'抽奖产品'}}</span> -    
-                <span>数量: {{item.number}}</span>
-              </div>
-            </template>
-            
-            
-          </div>
+      <div class='detail-content'>
+        <p>
+          <span class='left-title'>订单类型:</span>
+          <span>{{editReward.orderType==='1'?'积分产品':'抽奖产品'}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>订单序列号:</span>
+          <span>{{editReward.orderSn}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>用户昵称:</span>
+          <span>{{editReward.nickName}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>订单状态:</span>
+          <span>{{editReward.orderStatus==='0'?'未确认' : editReward.orderStatus==='1'?'已确认':editReward.orderStatus==='2'?'已取消':editReward.orderStatus==='3'?'已完成':'已退货'}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>付款状态:</span>
+          <span>{{editReward.payStatus==='1'?'已付款':'未付款'}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>发货状态:</span>
+          <span>{{editReward.shipStatus==='1'?'已发货':'未发货'}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>运单信息:</span>
+          <span>{{editReward.shipRemark}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>发货时间:</span>
+          <span>{{editReward.deliveryTime}}</span>
+        </p>
+
+        <p>
+          <span class='left-title'>积分:</span>
+          <span>{{editReward.score}}</span>
+        </p>
+
+        <div>
+          <span class='left-title'>收货人信息:</span>
+          <p class='right-content'>
+            <span>联系人:{{editReward.consignee.shippingContact}}</span><br>
+            <span>收货地址:{{editReward.consignee.shippingAddress}}</span><br>
+            <span>邮政编码:{{editReward.consignee.shippingZip}}</span><br>
+            <span>手机号:{{editReward.consignee.shippingMobile}}</span>
+          </p>
+          
         </div>
-      </FormItem>
-      
+
+        <FormItem label='订单产品' >
+          <div class='prosbox'>
+            <div v-for='item in editReward.orderProducts' class='prochild' >
+              <template v-if="item.orderType==='1'">
+                <div style='margin-right:5px'>
+                  <img :src="item.scoreProductImage" style='display:block;width:80px;height:80px;'>
+                </div>
+                <div>
+                  <span style='color:#000'>积分产品名称:{{item.scoreProductName}}</span><br>
+                  <span>产品类型:{{item.orderType==='1'?'积分产品':'抽奖产品'}}</span> -
+                  <span>积分:{{item.exchangeScore}}</span> -
+                  <span>数量: {{item.number}}</span>
+                </div>
+              </template>
+              <template v-else>
+                <div>
+                  <p style='color:#000'>抽奖产品名称:{{item.prizeName}}</p>
+                  <span >产品类型:{{item.orderType==='1'?'积分产品':'抽奖产品'}}</span> -    
+                  <span>数量: {{item.number}}</span>
+                </div>
+              </template>
+              
+              
+            </div>
+          </div>
+        </FormItem>
+      </div>
     </Form>
   </Modal>
   

@@ -254,9 +254,9 @@ export default {
           name:[
             { required: true, message: '不能为空'}
           ],
-          // image:[
-          //   { required: true, message: '不能为空'}
-          // ],
+          image:[
+            { required: true, message: '不能为空',trigger:blur}
+          ],
           score:[
             { required: true, message: '不能为空'}
           ],
